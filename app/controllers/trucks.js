@@ -85,7 +85,7 @@ export default Ember.Controller.extend({
         }
                 
         // L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
-        var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
+        // var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
         var geojson = [{
                         "type": "FeatureCollection",
                         "features": [
@@ -99,8 +99,10 @@ export default Ember.Controller.extend({
                               },
                             ]
                       }];
-        var myLayer = L.mapbox.featureLayer().addTo(map);
-        return myLayer.setGeoJSON(geojson);
+        // var myLayer = L.mapbox.featureLayer().addTo(map);
+        // return myLayer.setGeoJSON(geojson);
+        
+        map.featureLayer().setGeoJSON(geojson);
         
         
       });

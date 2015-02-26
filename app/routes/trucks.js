@@ -1,10 +1,12 @@
 import Ember from 'ember';
 
+var map;
+
 export default Ember.Route.extend({
   activate: function() {
     setTimeout(function() {
       L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
-      var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
+      map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
       
       var geojson = [{
                       "type": "FeatureCollection",
