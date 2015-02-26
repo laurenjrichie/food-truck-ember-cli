@@ -17,6 +17,7 @@ var currentTimeOfDay;
     currentHour = hour24;
   }
 var currentDay = dayArray[dayIndex];
+// var locations;
 
 export default Ember.Controller.extend({
   currentHour: currentHour,
@@ -25,6 +26,7 @@ export default Ember.Controller.extend({
   hours: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   timeOfDay: ['AM','PM'],
   trucks: [],
+  // locations: [],
   actions: {
     truckSearch: function(){
       console.log(currentHour);
@@ -47,6 +49,7 @@ export default Ember.Controller.extend({
       console.log(userTime);
       var _this = this;
       Ember.$.getJSON('https://data.sfgov.org/resource/jjew-r69b.json?$$app_token=RBuWnGSH2NAzZS1JHTxfCprNz&dayofweekstr=' + day).then(function(results){
+        var locations = [];
         for(var i= 0; i < results.length; i++){
           if(results[i].applicant !== "Natan's Catering" && results[i].applicant !== "Park's Catering" && results[i].applicant !== "May Catering"){
             var startTime = results[i].start24;
@@ -55,13 +58,18 @@ export default Ember.Controller.extend({
             endTime = endTime.substring(0, endTime.length - 3);
             if (userTime >= startTime  && userTime <= endTime){
               filter_trucks.push(results[i]);
+              var lat = results[i].latitude;
+              var long = results[i].longitude;
+              locations.push([lat, long]);
             }
           }
 
         }
-        return filter_trucks;
-      }).then(function(filter_trucks){
+        // return filter_trucks;  // used to have this
+        return locations;
+      }).then(function(locations){ // used to have filter_trucks passed through
         _this.set('trucks', filter_trucks);
+        console.log(locations);
       });
     }
   }
