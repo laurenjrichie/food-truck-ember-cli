@@ -21,6 +21,7 @@ var currentDay = dayArray[dayIndex];
 export default Ember.Controller.extend({
   currentHour: currentHour,
   currentDay: currentDay,
+  currentTimeOfDay: currentTimeOfDay,
   days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
   hours: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   timeOfDay: ['AM','PM'],
@@ -64,28 +65,26 @@ export default Ember.Controller.extend({
           }
 
         }
-        // return filter_trucks;  // used to have this
         return locations;
         
-      }).then(function(locations){ // used to have filter_trucks passed through
+      }).then(function(locations){
         _this.set('trucks', filter_trucks);
-        // _this.set('locations', locations);
-        // console.log(_this.get('locations'));
         
+        $('.leaflet-container').remove();
+        $('.ten.wide.column').append("<div id='map'></div>");
         var featureArray = [];
         for (var k = 0; k < locations.length; k++) {
           // featureArray.push({
           //   "type": "Feature",
           //   "geometry": {
           //     "type": "Point",
-          //     "coordinates": [locations[k][0], locations[k][1]]
+          //     "coordinates": []
           //   },
           //   "properties": {}
           // });
-        }
-                
-        // L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
-        // var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
+        }                
+        L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
+        var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
         var geojson = [{
                         "type": "FeatureCollection",
                         "features": [
@@ -99,12 +98,9 @@ export default Ember.Controller.extend({
                               },
                             ]
                       }];
-        // var myLayer = L.mapbox.featureLayer().addTo(map);
-        // return myLayer.setGeoJSON(geojson);
-        
-        map.featureLayer().setGeoJSON(geojson);
-        
-        
+        var myLayer = L.mapbox.featureLayer().addTo(map);
+        return myLayer.setGeoJSON(geojson);
+        map.featureLayer.setGeoJSON(geojson);
       });
     }
   }

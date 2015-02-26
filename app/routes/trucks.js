@@ -1,7 +1,5 @@
 import Ember from 'ember';
 
-var map;
-
 export default Ember.Route.extend({
   activate: function() {
     setTimeout(function() {
