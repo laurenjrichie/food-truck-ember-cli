@@ -2,3 +2,12 @@
   width: 800px;
   height: 700px;
 }
+
+#main-content {
+  padding-top: 10px;
+}
+
+#title {
+  padding-top: 15px;
+  padding-left: 40px;
+}
