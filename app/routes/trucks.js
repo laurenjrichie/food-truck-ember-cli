@@ -8,16 +8,16 @@ export default Ember.Route.extend({
       
       var geojson = [{
                       "type": "FeatureCollection",
-                      "features": [
-                        {
-                          "type": "Feature",
-                          "geometry": {
-                            "type": "Point",
-                            "coordinates": [-122.388078331989, 37.7667867792956]
-                          },
-                          "properties": {}
-                        },
-                      ]
+                      // "features": [
+                      //   {
+                      //     "type": "Feature",
+                      //     "geometry": {
+                      //       "type": "Point",
+                      //       "coordinates": [-122.388078331989, 37.7667867792956]
+                      //     },
+                      //     "properties": {}
+                      //   },
+                      // ]
                     }];
       
       var myLayer = L.mapbox.featureLayer().addTo(map);
@@ -26,3 +26,4 @@ export default Ember.Route.extend({
     
   }
 });
+

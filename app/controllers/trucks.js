@@ -17,7 +17,6 @@ var currentTimeOfDay;
     currentHour = hour24;
   }
 var currentDay = dayArray[dayIndex];
-// var locations;
 
 export default Ember.Controller.extend({
   currentHour: currentHour,
@@ -26,11 +25,11 @@ export default Ember.Controller.extend({
   hours: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   timeOfDay: ['AM','PM'],
   trucks: [],
-  // locations: [],
+  locations: [],
   actions: {
     truckSearch: function(){
-      console.log(currentHour);
       var filter_trucks = [];
+      var locations = [];
       var day = this.get('daySearch');
       var userStartTime = this.get('timeSearch');
       var usertimeOfDay = this.get('timeOfDaySearch');
@@ -46,10 +45,8 @@ export default Ember.Controller.extend({
           userTime = userStartTime;
         }
       }
-      console.log(userTime);
       var _this = this;
       Ember.$.getJSON('https://data.sfgov.org/resource/jjew-r69b.json?$$app_token=RBuWnGSH2NAzZS1JHTxfCprNz&dayofweekstr=' + day).then(function(results){
-        var locations = [];
         for(var i= 0; i < results.length; i++){
           if(results[i].applicant !== "Natan's Catering" && results[i].applicant !== "Park's Catering" && results[i].applicant !== "May Catering"){
             var startTime = results[i].start24;
@@ -61,15 +58,51 @@ export default Ember.Controller.extend({
               var lat = results[i].latitude;
               var long = results[i].longitude;
               locations.push([lat, long]);
+              _this.set('locations', locations);
+              console.log(locations);
             }
           }
 
         }
         // return filter_trucks;  // used to have this
         return locations;
+        
       }).then(function(locations){ // used to have filter_trucks passed through
         _this.set('trucks', filter_trucks);
-        console.log(locations);
+        // _this.set('locations', locations);
+        // console.log(_this.get('locations'));
+        
+        var featureArray = [];
+        for (var k = 0; k < locations.length; k++) {
+          // featureArray.push({
+          //   "type": "Feature",
+          //   "geometry": {
+          //     "type": "Point",
+          //     "coordinates": [locations[k][0], locations[k][1]]
+          //   },
+          //   "properties": {}
+          // });
+        }
+                
+        // L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
+        var map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
+        var geojson = [{
+                        "type": "FeatureCollection",
+                        "features": [
+                              {
+                                "type": "Feature",
+                                "geometry": {
+                                  "type": "Point",
+                                  "coordinates": [-122.388078331989, 37.7667867792956]
+                                },
+                                "properties": {}
+                              },
+                            ]
+                      }];
+        var myLayer = L.mapbox.featureLayer().addTo(map);
+        return myLayer.setGeoJSON(geojson);
+        
+        
       });
     }
   }

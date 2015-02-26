@@ -10,7 +10,7 @@
         {{ui-dropdown
             content=timeOfDay
             value=timeOfDaySearch
-            prompt="PM"
+            prompt=currentTimeOfDay
         }}
         {{ui-dropdown
             content=days
@@ -29,6 +29,10 @@
             {{truck.start24}}
             {{truck.end24}}
           </p>
+        {{/each}}
+        
+        {{#each location in locations}}
+          {{location}}
         {{/each}}
       </div>
       
