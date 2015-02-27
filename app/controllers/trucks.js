@@ -64,6 +64,7 @@ export default Ember.Controller.extend({
       var userStartTime = this.get('timeSearch');
       var usertimeOfDay = this.get('timeOfDaySearch');
       var truckArray = [];
+      var ourTrucks = [];
       var userTime =  0;
       if(userStartTime !== 12){
         if(usertimeOfDay === 'PM'){
@@ -107,10 +108,10 @@ export default Ember.Controller.extend({
         }
                 
       }).then(function() {
-        Ember.$.getJSON('https://aqueous-beach-9757.herokuapp.com/submissions?q=' + day).then(function(results){
-          results = results.trucks;
+        Ember.$.getJSON('https://frozen-eyrie-4055.herokuapp.com/submissions?q=' + day).then(function(results){
+          var results = results.submissions;
           for(var i= 0; i < results.length; i++){
-            console.log(result);
+            console.log(results);
             var result = results[i];
             var startTime = timeConvert(result.starttime);
             var endTime = timeConvert(result.endtime);
@@ -160,7 +161,7 @@ export default Ember.Controller.extend({
                 "type": "Feature",
                 "geometry": {
                   "type": "Point",
-                  "coordinates": [ourTrucks[k].longitude, ourTrucks[k].latitude]
+                  "coordinates": [+(ourTrucks[k].longitude), +(ourTrucks[k].latitude)]
                 },
                 "properties": {
                   'name': ourTrucks[k].name,
@@ -171,7 +172,9 @@ export default Ember.Controller.extend({
                   'marker-color': '#F7BE81',
                 }
               });
-          }          
+          }
+          
+          console.log(featureArray)
 
           L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
           var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
