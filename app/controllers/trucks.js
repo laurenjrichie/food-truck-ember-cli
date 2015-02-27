@@ -10,6 +10,27 @@ function twitterLink(name){
   return twitterLink;
 }
 
+function timeConvert(time){
+  var time24;
+  var timeHour = time.slice(0, time.length - 2);
+  timeHour = parseInt(timeHour);
+  var timeOfDay = time.slice(time.length - 2, time.length);
+  if (timeHour !== 12){
+    if(timeOfDay === 'PM'){
+      time24 = (12 + timeHour);
+    } else {
+      time24 = timeHour;
+    }
+  } else {
+    if(timeOfDay === 'PM'){
+      time24 = timeHour;
+    } else{
+      time24 = 0;
+    }
+  }
+  return time24;
+}
+
 var dayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 var currentDate = new Date();
 var dayIndex = currentDate.getDay();
@@ -36,10 +57,9 @@ export default Ember.Controller.extend({
   hours: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   timeOfDay: ['AM','PM'],
   trucks: [],
-  locations: [],
+  ourTrucks: [],
   actions: {
     truckSearch: function(){
-      var locations = [];
       var day = this.get('daySearch');
       var userStartTime = this.get('timeSearch');
       var usertimeOfDay = this.get('timeOfDaySearch');
@@ -86,6 +106,29 @@ export default Ember.Controller.extend({
           }
         }
                 
+      }).then(function() {
+        Ember.$.getJSON('https://aqueous-beach-9757.herokuapp.com/submissions?q=' + day).then(function(results){
+          results = results.trucks;
+          for(var i= 0; i < results.length; i++){
+            console.log(result);
+            var result = results[i];
+            var startTime = timeConvert(result.starttime);
+            var endTime = timeConvert(result.endtime);
+            if (userTime >= startTime  && userTime <= endTime){
+              console.log(result);
+              ourTrucks.push({
+                link: result.link,
+                name: result.name,
+                description: result.description,
+                startTime: result.starttime,
+                endTime: result.endtime,
+                longitude: result.longitude,
+                latitude: result.latitude
+                });
+              _this.set('ourTrucks', ourTrucks);
+            }
+          }
+        });
       }).then(function(){        
         $('.leaflet-container').remove();
         $('#map-canvas').append("<div id='map'></div>");
@@ -110,6 +153,25 @@ export default Ember.Controller.extend({
                 }
               });
           }
+          
+          var ourTrucks = _this.get('ourTrucks');
+          for (var k = 0; k < ourTrucks.length; k++) {
+            featureArray.push({
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [ourTrucks[k].longitude, ourTrucks[k].latitude]
+                },
+                "properties": {
+                  'name': ourTrucks[k].name,
+                  'description': ourTrucks[k].description,
+                  'link': ourTrucks[k].link,
+                  'startTime': ourTrucks[k].startTime,
+                  'endTime': ourTrucks[k].endTime,
+                  'marker-color': '#F7BE81',
+                }
+              });
+          }          
 
           L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
           var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
@@ -126,7 +188,7 @@ export default Ember.Controller.extend({
             " + layer.feature.properties.startTime + " - \
             " + layer.feature.properties.endTime + "</p>";
             layer.bindPopup(content);
-          })
+          });
         }, 100);
                 
       });
