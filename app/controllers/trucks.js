@@ -39,7 +39,6 @@ export default Ember.Controller.extend({
   locations: [],
   actions: {
     truckSearch: function(){
-      var locations = [];
       var day = this.get('daySearch');
       var userStartTime = this.get('timeSearch');
       var usertimeOfDay = this.get('timeOfDaySearch');
@@ -126,7 +125,7 @@ export default Ember.Controller.extend({
             " + layer.feature.properties.startTime + " - \
             " + layer.feature.properties.endTime + "</p>";
             layer.bindPopup(content);
-          })
+          });
         }, 100);
                 
       });
