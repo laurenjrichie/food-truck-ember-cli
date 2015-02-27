@@ -1,47 +1,50 @@
 <div class="ui grid" id="main-content">
   <div class="fourteen wide centered column">
     <div class="ui grid">
-      <div class="four wide column">
-        {{ui-dropdown
-            content=hours
-            value=timeSearch
-            prompt=currentHour
-        }}
-        {{ui-dropdown
-            content=timeOfDay
-            value=timeOfDaySearch
-            prompt=currentTimeOfDay
-        }}
-        {{ui-dropdown
-            content=days
-            value=daySearch
-            prompt=currentDay
-        }}
-        <button {{action "truckSearch"}}>Search</button>
+      <div class="six wide column">
+        <div class="row">
+          <div class="ui segment">
+            
+            {{ui-dropdown
+                content=hours
+                value=timeSearch
+                prompt=currentHour
+            }}
+            {{ui-dropdown
+                content=timeOfDay
+                value=timeOfDaySearch
+                prompt=currentTimeOfDay
+            }}
+            {{ui-dropdown
+                content=days
+                value=daySearch
+                prompt=currentDay
+            }}
+          </div>
+          <button {{action "truckSearch"}} class="ui teal button">Search</button>
+        </div>
 
-        {{#each truck in trucks}}
-          <a target="_blank" {{bind-attr href=currentDay}}>{{truck.applicant}}</a>
-          <p>
-            {{truck.applicant}}
-          </p>
-            <p>
-            {{truck.optionaltext}}
-            {{truck.start24}}
-            {{truck.end24}}
-          </p>
-        {{/each}}
         
-        {{#each location in locations}}
-          {{location}}
+        {{#each truck in trucks}}
+          <div class="ui divided list">
+            <div class="item">
+              <i class="map marker icon"></i>
+              <div class="content">
+                <a class="active blue header"target="_blank" {{bind-attr href=truck.link}}>{{truck.name}}</a>
+                <div class="description">{{truck.description}}</div>
+                <div class="description">{{truck.startTime}} - {{truck.endTime}}</div>
+              </div>
+            </div>
+          </div>
         {{/each}}
+
+
       </div>
       
-      <div class="ten wide column">
+      <div class="eight wide column" id="map-canvas">
         <div id='map'></div>
       </div>
     </div>
   </div>
   
 </div>
-
-

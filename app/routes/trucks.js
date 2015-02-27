@@ -3,8 +3,8 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   activate: function() {
     setTimeout(function() {
-      L.mapbox.accessToken = 'pk.eyJ1IjoibGF1cmVuanJpY2hpZSIsImEiOiJHTEY1OVFZIn0.MlJXkQlI1fW9t4Yi3ZOYlg';
-      map = L.mapbox.map('map', 'laurenjrichie.ladp904d'); // can use .setView here to specify coordinates
+      L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
+      var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
       
       var geojson = [{
                       "type": "FeatureCollection",
@@ -21,7 +21,7 @@ export default Ember.Route.extend({
                     }];
       
       var myLayer = L.mapbox.featureLayer().addTo(map);
-      return myLayer.setGeoJSON(geojson);
+      myLayer.setGeoJSON(geojson);
     }, 200);
     
   }

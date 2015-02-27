@@ -9,5 +9,14 @@
 
 #title {
   padding-top: 15px;
-  padding-left: 40px;
+  /*padding-left: 40px;*/
+  text-align: center;
+  font-size: 2.5em;
+  text-shadow: 2px 2px #8FD1C6;
+  font-family: Helvetica;
+}
+
+.ui .segment {
+  width: 220px;
+  display: inline-block;
 }
