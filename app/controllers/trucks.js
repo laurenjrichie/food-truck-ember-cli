@@ -192,7 +192,7 @@ export default Ember.Controller.extend({
             " + layer.feature.properties.endTime + "</p>";
             layer.bindPopup(content);
           });
-        }, 100);
+        }, 200);
                 
       });
     }
