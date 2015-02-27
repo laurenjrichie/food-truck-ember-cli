@@ -1,14 +1,15 @@
 import {
-  moduleFor,
+  moduleForModel,
   test
 } from 'ember-qunit';
 
-moduleFor('route:application', {
+moduleForModel('submission', {
   // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
+  needs: []
 });
 
 test('it exists', function(assert) {
-  var route = this.subject();
-  assert.ok(route);
+  var model = this.subject();
+  // var store = this.store();
+  assert.ok(!!model);
 });

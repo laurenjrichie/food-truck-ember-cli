@@ -22,7 +22,9 @@
             }}
           </div>
           <button {{action "truckSearch"}} class="ui teal button">Search</button>
-          <button {{action 'showModal' 'new-truck-modal' model}} class="ui blue button">Add a truck</button>
+          {{#link-to 'new'}}
+            <button class="ui blue button">Add a truck</button>
+          {{/link-to}}
         </div>
 
         

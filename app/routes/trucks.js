@@ -12,10 +12,8 @@ export default Ember.Route.extend({
       
       var myLayer = L.mapbox.featureLayer().addTo(map);
       myLayer.setGeoJSON(geojson);
-    }, 200);    
-  },
-  model: function() {
-    return Ember.Object.create({ name: 'My name' });
+    }, 200);
+    
   }
 });
 

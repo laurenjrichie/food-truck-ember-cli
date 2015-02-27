@@ -1,0 +1,64 @@
+<div class="ui grid">
+  <div class="ten wide centered column">
+    <form class="ui form">
+      <h2>Submit a truck</h2>
+      <p>
+        Don't see a food truck in our app? Add it here!
+      </p>
+      <div class="two fields">
+        <div class="field">
+          <label>Name</label>
+          {{input value=name}}
+        </div>
+        <div class="field">
+          <label>Twitter page</label>
+          {{input value=link}}
+        </div>
+      </div>
+      <div class="field">
+        <label>Description</label>
+        {{input value=description}}
+      </div>
+      <div class="field">
+        <label>Time and Day</label>
+        {{ui-dropdown
+            content=hours
+            value=openTime
+            prompt="Time truck opens"
+        }}
+        {{ui-dropdown
+            content=timeOfDay
+            value=openTimeOfDay
+            prompt="AM/PM"
+        }}
+        {{ui-dropdown
+            content=hours
+            value=closeTime
+            prompt="Time truck closes"
+        }}
+        {{ui-dropdown
+            content=timeOfDay
+            value=closeTimeOfDay
+            prompt="AM/PM"
+        }}
+        {{ui-dropdown
+            content=days
+            value=dayOfWeek
+            prompt="Day of the week"
+        }}
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Latitude</label>
+          {{input value=lat}}
+        </div>
+        <div class="field">
+          <label>Longitude</label>
+          {{input value=long}}
+        </div>
+      </div>
+    
+      <button {{action 'createSubmission'}} class="ui teal button">Submit truck</button>
+    </form>
+  </div>
+</div>
