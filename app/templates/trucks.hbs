@@ -28,16 +28,7 @@
         </div>
 
         <div class="ui divided list">
-          {{#each truck in ourTrucks}}
-            <div class="item">
-              <i class="map marker icon"></i>
-              <div class="content">
-                <a class="active blue header"target="_blank" {{bind-attr href=truck.link}}>{{truck.name}}</a>
-                <div class="description">{{truck.description}}</div>
-                <div class="description">{{truck.startTime}} - {{truck.endTime}}</div>
-              </div>
-            </div>
-          {{/each}}
+          {{map-box trucks=trucks}}
           {{#each truck in trucks}}
             <div class="item">
               <i class="map marker icon"></i>

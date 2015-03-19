@@ -64,7 +64,6 @@ export default Ember.Controller.extend({
       var userStartTime = this.get('timeSearch');
       var usertimeOfDay = this.get('timeOfDaySearch');
       var truckArray = [];
-      var ourTrucks = [];
       var userTime =  0;
       if(userStartTime !== 12){
         if(usertimeOfDay === 'PM'){
@@ -92,108 +91,41 @@ export default Ember.Controller.extend({
           
           if (userTime >= startTime  && userTime <= endTime){
             var name = result.applicant;
-            var link = twitterLink(name);
-            
+            var link = twitterLink(name);            
             truckArray.push({
-                link: link,
-                name: name,
-                description: result.optionaltext,
-                startTime: result.starttime,
-                endTime: result.endtime,
-                longitude: result.longitude,
-                latitude: result.latitude
-                });
+              link: link,
+              name: name,
+              description: result.optionaltext,
+              startTime: result.starttime,
+              endTime: result.endtime,
+              longitude: result.longitude,
+              latitude: result.latitude,
+              color: "#009fda"
+              });
+          }
+        }
+      });
+      
+      Ember.$.getJSON('http://sf-foodtruck-api.herokuapp.com/submissions?q=' + day).then(function(results){
+        var results = results.submissions;
+        for(var i= 0; i < results.length; i++){
+          var result = results[i];
+          var startTime = timeConvert(result.starttime);
+          var endTime = timeConvert(result.endtime);
+          if (userTime >= startTime  && userTime <= endTime){
+            truckArray.push({
+              link: result.link,
+              name: result.name,
+              description: result.description,
+              startTime: result.starttime,
+              endTime: result.endtime,
+              longitude: result.longitude,
+              latitude: result.latitude,
+              color: "#F7BE81"
+              });
             _this.set('trucks', truckArray);
           }
         }
-                
-      }).then(function() {
-        Ember.$.getJSON('http://sf-foodtruck-api.herokuapp.com/submissions?q=' + day).then(function(results){
-          var results = results.submissions;
-          for(var i= 0; i < results.length; i++){
-            console.log(results);
-            var result = results[i];
-            var startTime = timeConvert(result.starttime);
-            var endTime = timeConvert(result.endtime);
-            if (userTime >= startTime  && userTime <= endTime){
-              console.log(result);
-              ourTrucks.push({
-                link: result.link,
-                name: result.name,
-                description: result.description,
-                startTime: result.starttime,
-                endTime: result.endtime,
-                longitude: result.longitude,
-                latitude: result.latitude
-                });
-              _this.set('ourTrucks', ourTrucks);
-            }
-          }
-        });
-      }).then(function(){        
-        // $('.leaflet-container').remove();
-        // $('#map-canvas').append("<div id='map'></div>");
-        
-        // setTimeout(function() {
-        //   var featureArray = [];
-        //   var trucks = _this.get('trucks');
-        //   for (var i = 0; i < trucks.length; i++) {
-        //     featureArray.push({
-        //         "type": "Feature",
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [trucks[i].longitude, trucks[i].latitude]
-        //         },
-        //         "properties": {
-        //           'name': trucks[i].name,
-        //           'description': trucks[i].description,
-        //           'link': trucks[i].link,
-        //           'startTime': trucks[i].startTime,
-        //           'endTime': trucks[i].endTime,
-        //           'marker-color': '#009fda',
-        //         }
-        //       });
-        //   }
-          
-          // var ourTrucks = _this.get('ourTrucks');
-          // for (var k = 0; k < ourTrucks.length; k++) {
-          //   featureArray.push({
-          //       "type": "Feature",
-          //       "geometry": {
-          //         "type": "Point",
-          //         "coordinates": [+(ourTrucks[k].longitude), +(ourTrucks[k].latitude)]
-          //       },
-          //       "properties": {
-          //         'name': ourTrucks[k].name,
-          //         'description': ourTrucks[k].description,
-          //         'link': ourTrucks[k].link,
-          //         'startTime': ourTrucks[k].startTime,
-          //         'endTime': ourTrucks[k].endTime,
-          //         'marker-color': '#F7BE81',
-          //       }
-          //     });
-          // }
-          // 
-          // console.log(featureArray)
-
-        //   L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
-        //   var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
-        //   var geojson = [{
-        //                   "type": "FeatureCollection",
-        //                   "features": featureArray
-        //                 }];
-        //   var myLayer = L.mapbox.featureLayer().addTo(map);
-        //   myLayer.setGeoJSON(geojson);
-        //   myLayer.eachLayer(function(layer) {
-        //     var content = "<h3><a href=" + layer.feature.properties.link + "\
-        //     >" + layer.feature.properties.name + "</a></h3><p>\
-        //     " + layer.feature.properties.description + "</p><p>\
-        //     " + layer.feature.properties.startTime + " - \
-        //     " + layer.feature.properties.endTime + "</p>";
-        //     layer.bindPopup(content);
-        //   });
-        // }, 300);
-                
       });
     }
   }
