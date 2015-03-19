@@ -108,7 +108,7 @@ export default Ember.Controller.extend({
         }
                 
       }).then(function() {
-        Ember.$.getJSON('https://frozen-eyrie-4055.herokuapp.com/submissions?q=' + day).then(function(results){
+        Ember.$.getJSON('http://sf-foodtruck-api.herokuapp.com/submissions?q=' + day).then(function(results){
           var results = results.submissions;
           for(var i= 0; i < results.length; i++){
             console.log(results);
@@ -131,70 +131,87 @@ export default Ember.Controller.extend({
           }
         });
       }).then(function(){        
-        $('.leaflet-container').remove();
-        $('#map-canvas').append("<div id='map'></div>");
+        // $('.leaflet-container').remove();
+        // $('#map-canvas').append("<div id='map'></div>");
         
-        setTimeout(function() {
-          var featureArray = [];
-          var trucks = _this.get('trucks');
-          for (var i = 0; i < trucks.length; i++) {
-            featureArray.push({
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [trucks[i].longitude, trucks[i].latitude]
-                },
-                "properties": {
-                  'name': trucks[i].name,
-                  'description': trucks[i].description,
-                  'link': trucks[i].link,
-                  'startTime': trucks[i].startTime,
-                  'endTime': trucks[i].endTime,
-                  'marker-color': '#009fda',
-                }
-              });
-          }
+        // setTimeout(function() {
+        //   var featureArray = [];
+        //   var trucks = _this.get('trucks');
+        //   for (var i = 0; i < trucks.length; i++) {
+        //     featureArray.push({
+        //         "type": "Feature",
+        //         "geometry": {
+        //           "type": "Point",
+        //           "coordinates": [trucks[i].longitude, trucks[i].latitude]
+        //         },
+        //         "properties": {
+        //           'name': trucks[i].name,
+        //           'description': trucks[i].description,
+        //           'link': trucks[i].link,
+        //           'startTime': trucks[i].startTime,
+        //           'endTime': trucks[i].endTime,
+        //           'marker-color': '#009fda',
+        //         }
+        //       });
+        //   }
           
-          var ourTrucks = _this.get('ourTrucks');
-          for (var k = 0; k < ourTrucks.length; k++) {
-            featureArray.push({
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [+(ourTrucks[k].longitude), +(ourTrucks[k].latitude)]
-                },
-                "properties": {
-                  'name': ourTrucks[k].name,
-                  'description': ourTrucks[k].description,
-                  'link': ourTrucks[k].link,
-                  'startTime': ourTrucks[k].startTime,
-                  'endTime': ourTrucks[k].endTime,
-                  'marker-color': '#F7BE81',
-                }
-              });
-          }
-          
-          console.log(featureArray)
+          // var ourTrucks = _this.get('ourTrucks');
+          // for (var k = 0; k < ourTrucks.length; k++) {
+          //   featureArray.push({
+          //       "type": "Feature",
+          //       "geometry": {
+          //         "type": "Point",
+          //         "coordinates": [+(ourTrucks[k].longitude), +(ourTrucks[k].latitude)]
+          //       },
+          //       "properties": {
+          //         'name': ourTrucks[k].name,
+          //         'description': ourTrucks[k].description,
+          //         'link': ourTrucks[k].link,
+          //         'startTime': ourTrucks[k].startTime,
+          //         'endTime': ourTrucks[k].endTime,
+          //         'marker-color': '#F7BE81',
+          //       }
+          //     });
+          // }
+          // 
+          // console.log(featureArray)
 
-          L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
-          var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
-          var geojson = [{
-                          "type": "FeatureCollection",
-                          "features": featureArray
-                        }];
-          var myLayer = L.mapbox.featureLayer().addTo(map);
-          myLayer.setGeoJSON(geojson);
-          myLayer.eachLayer(function(layer) {
-            var content = "<h3><a href=" + layer.feature.properties.link + "\
-            >" + layer.feature.properties.name + "</a></h3><p>\
-            " + layer.feature.properties.description + "</p><p>\
-            " + layer.feature.properties.startTime + " - \
-            " + layer.feature.properties.endTime + "</p>";
-            layer.bindPopup(content);
-          });
-        }, 300);
+        //   L.mapbox.accessToken = 'pk.eyJ1IjoiZGF5eW51aGhoIiwiYSI6IlNrUWlXd0kifQ.PkwjuKO6Clksu2OGIoePeA';
+        //   var map = L.mapbox.map('map', 'dayynuhhh.b2259e3f').setView([37.791214, -122.417902], 14);
+        //   var geojson = [{
+        //                   "type": "FeatureCollection",
+        //                   "features": featureArray
+        //                 }];
+        //   var myLayer = L.mapbox.featureLayer().addTo(map);
+        //   myLayer.setGeoJSON(geojson);
+        //   myLayer.eachLayer(function(layer) {
+        //     var content = "<h3><a href=" + layer.feature.properties.link + "\
+        //     >" + layer.feature.properties.name + "</a></h3><p>\
+        //     " + layer.feature.properties.description + "</p><p>\
+        //     " + layer.feature.properties.startTime + " - \
+        //     " + layer.feature.properties.endTime + "</p>";
+        //     layer.bindPopup(content);
+        //   });
+        // }, 300);
                 
       });
     }
   }
 });
+
+// 
+// var counter = 2;
+// var finished = function(){
+//   console.log('We have gotten all our data!')
+// }
+// var getJSON = function(url, callback){
+//   ajaxCall(url, function(){
+//     counter--
+//     if(counter == 0){
+//       callback()
+//     }
+//   })
+//   
+// }
+// getJSON("http//foo.1", finished)
+// getJSON("http//foo.2", finished)
