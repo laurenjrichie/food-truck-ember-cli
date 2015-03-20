@@ -57,7 +57,7 @@ export default Ember.Controller.extend({
   hours: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   timeOfDay: ['AM','PM'],
   trucks: [],
-  ourTrucks: [],
+  pointsSet: false,
   actions: {
     truckSearch: function(){
       var day = this.get('daySearch');
@@ -77,56 +77,64 @@ export default Ember.Controller.extend({
         }
       }
       var _this = this;
-      Ember.$.getJSON('https://data.sfgov.org/resource/jjew-r69b.json?$$app_token=RBuWnGSH2NAzZS1JHTxfCprNz&dayofweekstr=' + day).then(function(results){
-        for(var i= 0; i < results.length; i++){ 
-          var result = results[i];
-          if(result.applicant === "Natan's Catering" && result.applicant === "Park's Catering" && result.applicant === "May Catering") {
-            continue;
+      
+      function makeApiCalls() {
+        Ember.$.getJSON('https://data.sfgov.org/resource/jjew-r69b.json?$$app_token=RBuWnGSH2NAzZS1JHTxfCprNz&dayofweekstr=' + day).then(function(results){
+          for(var i= 0; i < results.length; i++){ 
+            var result = results[i];
+            if(result.applicant === "Natan's Catering" && result.applicant === "Park's Catering" && result.applicant === "May Catering") {
+              continue;
+            }
+                     
+            var startTime = result.start24;
+            var endTime = result.end24;
+            startTime = startTime.substring(0, startTime.length - 3);
+            endTime = endTime.substring(0, endTime.length - 3);
+            
+            if (userTime >= startTime  && userTime <= endTime){
+              var name = result.applicant;
+              var link = twitterLink(name);            
+              truckArray.push({
+                link: link,
+                name: name,
+                description: result.optionaltext,
+                startTime: result.starttime,
+                endTime: result.endtime,
+                longitude: result.longitude,
+                latitude: result.latitude,
+                color: "#009fda"
+                });
+            }
           }
-                   
-          var startTime = result.start24;
-          var endTime = result.end24;
-          startTime = startTime.substring(0, startTime.length - 3);
-          endTime = endTime.substring(0, endTime.length - 3);
-          
-          if (userTime >= startTime  && userTime <= endTime){
-            var name = result.applicant;
-            var link = twitterLink(name);            
-            truckArray.push({
-              link: link,
-              name: name,
-              description: result.optionaltext,
-              startTime: result.starttime,
-              endTime: result.endtime,
-              longitude: result.longitude,
-              latitude: result.latitude,
-              color: "#009fda"
-              });
+        });
+        
+        Ember.$.getJSON('http://sf-foodtruck-api.herokuapp.com/submissions?q=' + day).then(function(results){
+          var results = results.submissions;
+          for(var i= 0; i < results.length; i++){
+            var result = results[i];
+            var startTime = timeConvert(result.starttime);
+            var endTime = timeConvert(result.endtime);
+            if (userTime >= startTime  && userTime <= endTime){
+              truckArray.push({
+                link: result.link,
+                name: result.name,
+                description: result.description,
+                startTime: result.starttime,
+                endTime: result.endtime,
+                longitude: result.longitude,
+                latitude: result.latitude,
+                color: "#F7BE81"
+                });
+              _this.set('trucks', truckArray);
+            }
           }
-        }
+        });
+      }
+      makeApiCalls().then(function() {
+        console.log('inside .then')
       });
       
-      Ember.$.getJSON('http://sf-foodtruck-api.herokuapp.com/submissions?q=' + day).then(function(results){
-        var results = results.submissions;
-        for(var i= 0; i < results.length; i++){
-          var result = results[i];
-          var startTime = timeConvert(result.starttime);
-          var endTime = timeConvert(result.endtime);
-          if (userTime >= startTime  && userTime <= endTime){
-            truckArray.push({
-              link: result.link,
-              name: result.name,
-              description: result.description,
-              startTime: result.starttime,
-              endTime: result.endtime,
-              longitude: result.longitude,
-              latitude: result.latitude,
-              color: "#F7BE81"
-              });
-            _this.set('trucks', truckArray);
-          }
-        }
-      });
+        
     }
   }
 });

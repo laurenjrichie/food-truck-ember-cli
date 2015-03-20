@@ -1,6 +1,11 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  pointsSetBinding: 'controller.pointsSet',
+  onPointsSetChange: function() {
+    console.log("test")
+  }.observes('pointsSet'),
+  
   actions: {
     drawMap: function(trucks) {
       var featureArray = [];
